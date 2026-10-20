@@ -15,10 +15,9 @@ _Cập nhật: 20/10/2026_
 
 ## Cần làm để chạy dữ liệu chung thật
 
-1. Tạo một Supabase project miễn phí.
-2. Chạy file `supabase/schema.sql` trong Supabase SQL Editor.
-3. Điền Project URL và anon/publishable key vào `web/supabase-config.js`.
-4. Build/deploy lại website sau khi điền key.
+1. Chạy file `supabase/schema.sql` trong Supabase SQL Editor của project.
+2. Website đã được điền Project URL và publishable key ở `web/supabase-config.js`.
+3. Build/deploy lại website sau khi chạy schema.
 
 Khi hoàn tất, góc tab **Xem lại kỷ niệm** sẽ hiện `Realtime đang hoạt động`. Từ lúc đó, bất cứ ai thêm ảnh/lời nhắn/photobook đều thấy ngay trên các máy khác.
 
