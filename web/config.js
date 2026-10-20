@@ -12,7 +12,7 @@ window.GIFT_CONFIG = {
   cursorEmoji: "🌷",
   music: { start: "assets/1.mp3", middle: "assets/2.mp3", finale: "assets/3.mp3" },
   slideDuration: 8000,
-  finaleLead: 22000,
+  finaleLead: 21000,
   slides: [
     { variant:"hero", background:PHOTO.e, kicker:"MỞ ĐẦU · 20102026", title:"Có những ngày bình thường,", accent:"nhờ có nhau mà thành kỷ niệm.", note:"Một cuốn phim ngắn dành riêng cho lớp mình.", photos:[PHOTO.a,PHOTO.b,PHOTO.c] },
     { variant:"duo", background:PHOTO.a, kicker:"01 · NGÀY ĐẦU TIÊN", title:"Từ những lần đầu", accent:"còn hơi ngại ngùng…", note:"Những gương mặt lạ rồi dần trở thành một phần rất quen.", photos:[PHOTO.b,PHOTO.c,PHOTO.d,PHOTO.e] },
@@ -30,5 +30,5 @@ window.GIFT_CONFIG = {
     { variant:"stack", background:PHOTO.a, kicker:"13 · SẮP ĐẾN ĐOẠN CUỐI", title:"Cuốn phim sắp hết,", accent:"kỷ niệm thì còn dài.", note:"Giữ lại khoảnh khắc này thêm một chút nữa nhé.", photos:[PHOTO.d,PHOTO.c,PHOTO.e,PHOTO.b] },
     { variant:"finale", background:PHOTO.e, kicker:"14 · VÀ CUỐI CÙNG…", title:"Có một điều", accent:"muốn gửi riêng đến bạn.", note:"Bật âm lượng lên một chút. Đoạn hay nhất sắp tới rồi.", photos:[PHOTO.a,PHOTO.b,PHOTO.c,PHOTO.d] }
   ],
-  finalWish: "Chúc các bạn nữ lớp mình một ngày 20/10 thật vui, luôn tự tin, hạnh phúc và gặp thật nhiều điều tử tế. Cảm ơn vì đã là một phần không thể thiếu của lớp chúng mình!"
+  finalWish: "Nhân ngày 20/10, tụi mình muốn gửi đến các bạn nữ lời chúc chân thành nhất. Cảm ơn vì đã mang đến cho lớp những tiếng cười rất riêng, những sự quan tâm nhỏ bé nhưng đủ làm một ngày đi học trở nên ấm áp hơn, và cả nguồn năng lượng khiến những kỷ niệm bình thường cũng trở nên đáng nhớ. Mong các bạn sẽ luôn được yêu thương, được lắng nghe, được tự do theo đuổi điều mình thích và luôn tin rằng bản thân mình xứng đáng với những điều tốt đẹp nhất. Dù sau này mỗi người đi một hướng, hy vọng khi nhớ về những năm tháng này, chúng ta vẫn có thể mỉm cười vì đã từng có một tập thể thật vui, thật gần gũi và thật thanh xuân. Chúc các bạn luôn rạng rỡ theo cách của riêng mình — không chỉ hôm nay, mà trong mọi ngày phía trước."
 };

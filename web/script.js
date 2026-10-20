@@ -36,7 +36,7 @@
     });
   }
 
-  function startStory() { storyStarted = performance.now(); finaleStarted = false; const total = totalDuration(); showSlide(0); clockTimer = setInterval(updateClock, 200); finaleTimer = setTimeout(startFinaleMusic, Math.max(0, total - (cfg.finaleLead || 22000))); }
+  function startStory() { storyStarted = performance.now(); finaleStarted = false; const total = totalDuration(); showSlide(0); clockTimer = setInterval(updateClock, 200); finaleTimer = setTimeout(startFinaleMusic, Math.max(0, total - (cfg.finaleLead || 21000))); }
   function totalDuration() { return (cfg.slides?.length || 0) * (cfg.slideDuration || 8000); }
   function showSlide(index) { clearTimeout(slideTimer); const slides = $$(".story-slide"), dots = $$(".slide-dots i"), duration = cfg.slideDuration || 8000; slides.forEach((s,i) => { s.classList.remove("active","leaving"); if (i === index) s.classList.add("active"); }); dots.forEach((d,i) => d.classList.toggle("active", i === index)); slideTimer = setTimeout(() => { slides[index].classList.add("leaving"); setTimeout(() => { if (index + 1 < slides.length) showSlide(index + 1); else explodeFinal(); }, 780); }, Math.max(500, duration - 780)); }
   function updateClock() { const total = totalDuration(), elapsed = clamp(performance.now() - storyStarted, 0, total); $("#timelineFill").style.width = `${elapsed / total * 100}%`; $("#storyClock").textContent = `${formatTime(elapsed)} / ${formatTime(total)}`; }
