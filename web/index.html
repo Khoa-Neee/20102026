@@ -1,64 +1,8 @@
-<!doctype html>
-<html lang="vi">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3c8d0">
-  <meta name="description" content="20102026 — món quà nhỏ dành tặng các bạn nữ lớp mình.">
-  <title>20102026</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="grain" aria-hidden="true"></div>
-  <div id="cursor" class="custom-cursor" aria-hidden="true"><span>🌷</span></div>
-  <div id="effects" class="effects" aria-hidden="true"></div>
-  <div class="audio-dock"><button id="soundToggle" type="button" aria-label="Bật hoặc tắt nhạc">♫</button><span id="trackLabel">Nhạc mở đầu</span></div>
-  <audio id="musicStart" loop preload="auto"></audio><audio id="musicMiddle" loop preload="auto"></audio><audio id="musicFinale" preload="auto"></audio>
-
-  <main>
-    <section id="startScreen" class="screen start-screen" aria-labelledby="startTitle">
-      <div class="start-date" aria-hidden="true">20<span>·</span>10</div>
-      <div class="start-card"><p class="eyebrow">MỘT MÓN QUÀ NHỎ · 20102026</p><h1 id="startTitle">Có điều này<br><em>muốn gửi đến bạn…</em></h1><p>Bật âm thanh lên nhé — câu chuyện này có nhạc.</p><i class="tape"></i><i class="doodle d1">✿</i><i class="doodle d2">♡</i></div>
-      <button id="runawayStart" class="runaway-start" type="button">BẮT ĐẦU <span>→</span></button><p id="startHint" class="start-hint" aria-live="polite">Bắt được tao đi 😝</p>
-    </section>
-
-    <section id="storyScreen" class="screen story-screen" hidden aria-label="Album kỷ niệm tự động">
-      <div id="slideStage" class="slide-stage"></div>
-      <div class="story-ui"><div class="story-brand">20102026</div><div id="slideDots" class="slide-dots" aria-hidden="true"></div><button id="skipStory" class="ghost-btn" type="button">Đến xưởng hoa →</button></div>
-      <div class="story-progress"><span id="storyProgress"></span></div>
-    </section>
-
-    <section id="gameScreen" class="screen game-screen" hidden aria-labelledby="gameTitle">
-      <header class="game-heading"><div><span class="eyebrow">MINI GAME · DỮ LIỆU CHUNG</span><h2 id="gameTitle">Xưởng hoa &amp; lớp học</h2></div><p>Kéo hoa đến đúng chỗ bạn muốn. Sau đó chọn một chiếc ghế trong lớp và ghi tên.</p></header>
-      <div class="workshop-grid">
-        <section class="bouquet-workshop" aria-label="Khu vực ghép hoa">
-          <div class="palette-head"><b>Kệ hoa hôm nay</b><span>kéo tối đa 12 bông</span></div><div id="flowerChoices" class="flower-choices"></div>
-          <div id="bouquetDrop" class="bouquet-drop" aria-label="Kéo hoa vào giấy gói"><div class="bouquet-aura"></div><div id="arrangement" class="arrangement"></div><div class="wrapper-paper"><span></span></div><div class="ribbon">♡</div><p id="dropHint">kéo hoa vào đây<br><small>có thể kéo lại từng bông</small></p></div>
-          <button id="clearBouquet" class="text-btn" type="button">↺ Làm lại bó hoa</button>
-        </section>
-        <section class="classroom-panel" aria-labelledby="classroomTitle">
-          <div class="classroom-topbar"><div><span class="live-dot"></span><b id="classroomTitle">Lớp học trực tiếp</b></div><span id="onlineStatus">đang kết nối…</span></div>
-          <div class="classroom-room"><div class="teacher-zone"><span>BẢNG</span><div class="teacher-desk">Bàn giáo viên</div></div><div id="deskGrid" class="desk-grid" aria-label="Sơ đồ 4 dãy, mỗi dãy 6 bàn, mỗi bàn 2 ghế"></div><div class="room-door">CỬA</div></div>
-          <div class="seat-legend"><span><i class="seat-demo free"></i> Ghế trống</span><span><i class="seat-demo chosen"></i> Bạn chọn</span><span><i class="seat-demo taken"></i> Đã có người</span></div>
-        </section>
-      </div>
-      <form id="nameForm" class="pin-form"><label for="recipientName">Đây là hoa của…</label><input id="recipientName" type="text" maxlength="30" placeholder="Tên của bạn" autocomplete="name" required><div id="seatChoice">Chưa chọn ghế</div><button class="primary-btn" type="submit">Đặt hoa vào lớp <span>→</span></button><p id="formStatus" role="status"></p></form>
-    </section>
-
-    <section id="boardScreen" class="screen board-screen" hidden aria-labelledby="boardTitle">
-      <div class="board-intro"><span class="chalk-label">BẢNG CHUNG · ĐANG CẬP NHẬT</span><h2 id="boardTitle">Lớp mình đang<br><em>nở hoa.</em></h2><p>Mỗi chiếc ghế sáng lên là một người vừa để lại bó hoa của riêng mình.</p><div id="finaleStatus" class="finale-status">Một điều cuối cùng đang đến…</div></div>
-      <div class="board-room-wrap"><div id="boardRoom" class="board-room"></div><div id="recentBouquets" class="recent-bouquets"></div></div>
-    </section>
-
-    <section id="finalScreen" class="screen final-screen" hidden aria-labelledby="finalTitle">
-      <div id="shockwave" class="shockwave" aria-hidden="true"></div><div class="final-number" aria-hidden="true">20102026</div>
-      <div class="final-card"><span class="eyebrow">VÀ CUỐI CÙNG…</span><h2 id="finalTitle">Chúc mừng ngày<br><em>Phụ nữ Việt Nam!</em></h2><p id="finalWish"></p><div class="signature">— Từ những chàng trai <span id="className">lớp chúng mình</span> ♡</div><button id="replay" class="primary-btn" type="button">Xem lại từ đầu <span>↻</span></button></div>
-    </section>
-  </main>
-  <div id="dragGhost" class="drag-ghost" aria-hidden="true"></div><div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="config.js"></script><script src="script.js"></script>
-</body>
-</html>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#1b1216"><meta name="description" content="20102026 — cuốn phim kỷ niệm dành tặng các bạn nữ lớp mình."><title>20102026</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"></head>
+<body><div class="grain" aria-hidden="true"></div><div id="cursor" class="cursor" aria-hidden="true">🌷</div><div id="effects" class="effects" aria-hidden="true"></div>
+<div class="audio-dock"><button id="soundToggle" type="button" aria-label="Bật hoặc tắt nhạc">♫</button><span id="trackLabel">Nhạc mở đầu</span></div><audio id="musicStart" loop preload="auto"></audio><audio id="musicMiddle" loop preload="auto"></audio><audio id="musicFinale" preload="auto"></audio>
+<main>
+  <section id="startScreen" class="screen start-screen"><div class="start-date">20<span>·</span>10</div><div class="start-card"><span class="eyebrow">MỘT CUỐN PHIM NHỎ · 20102026</span><h1>Có điều này<br><em>muốn gửi đến bạn…</em></h1><p>Hai phút thôi. Bật âm thanh lên nhé.</p><i class="tape"></i><i class="doodle a">✿</i><i class="doodle b">♡</i></div><button id="runawayStart" class="runaway" type="button">BẮT ĐẦU <span>→</span></button><p id="startHint" class="start-hint">Bắt được tao đi 😝</p></section>
+  <section id="storyScreen" class="screen story-screen" hidden><div id="slideStage" class="slide-stage"></div><header class="story-head"><b>20102026</b><div id="slideDots" class="slide-dots"></div><span id="storyClock">00:00 / 02:00</span></header><div class="timeline"><span id="timelineFill"></span></div></section>
+  <section id="finalScreen" class="screen final-screen" hidden><div class="shockwave"></div><div class="final-number">20102026</div><div class="final-card"><span class="eyebrow">VÀ CUỐI CÙNG…</span><h2>Chúc mừng ngày<br><em>Phụ nữ Việt Nam!</em></h2><p id="finalWish"></p><div class="signature">— Từ những chàng trai <span id="className">lớp chúng mình</span> ♡</div><button id="replay" class="primary" type="button">Xem lại từ đầu <span>↻</span></button></div></section>
+</main><div id="toast" class="toast" role="status"></div><script src="config.js"></script><script src="script.js"></script></body></html>
