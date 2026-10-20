@@ -1,28 +1,30 @@
-# Hướng dẫn nội dung A1K37
+# Cấu hình ảnh chung cho A1K37 bằng Supabase
 
-Website dùng `web/index.html` làm trang chính theo giao diện căn phòng pixel A1K37.
+Website không còn dùng video mẫu và không lưu ảnh riêng trong trình duyệt. Ảnh kỷ niệm, ảnh trên tường, lời nhắn và Photobook đều dùng chung dữ liệu Supabase nên mọi người mở trang sẽ thấy cùng nội dung.
 
-## Video kỷ niệm
+## 1. Tạo Supabase project
 
-Video của tab **Xem lại kỷ niệm** nằm tại:
+Tạo một project miễn phí tại Supabase. Sau khi project sẵn sàng, mở **SQL Editor**, tạo query mới, dán toàn bộ nội dung file `supabase/schema.sql`, rồi bấm **Run**. File này tạo bảng dữ liệu, bucket ảnh công khai và bật realtime.
 
-`web/assets/memories/video.mp4`
+## 2. Nối website với Supabase
 
-Muốn thay video, chỉ cần chép video MP4 mới đè lên file này và giữ nguyên tên `video.mp4`.
+Vào **Project Settings → API** (hoặc **Connect**) và lấy Project URL cùng `anon` key/publishable key. Mở `web/supabase-config.js` và thay hai giá trị mẫu:
 
-## Ảnh do người xem thêm
+```js
+window.SUPABASE_CONFIG = {
+    url: "https://PROJECT_CUA_BAN.supabase.co",
+    anonKey: "ANON_HOAC_PUBLISHABLE_KEY_CUA_BAN"
+};
+```
 
-Người xem mở tab **Xem lại kỷ niệm**, bấm **NEXT**, rồi chọn **Thêm ảnh trực tiếp**.
+Khóa `anon`/publishable được phép nằm trong frontend. Tuyệt đối không đưa `service_role` key vào repo.
 
-Ảnh được lưu trong IndexedDB của trình duyệt:
+## 3. Cách hoạt động
 
-- tải lại trang vẫn còn;
-- chỉ xuất hiện trên trình duyệt và thiết bị đã thêm ảnh;
-- không tự đồng bộ sang điện thoại hoặc máy tính khác;
-- người xem có thể xóa từng ảnh bằng nút `×`.
+- **Xem lại kỷ niệm:** bấm **Thêm ảnh vào album chung**. Ảnh được tải thẳng lên Supabase Storage và tự xuất hiện với mọi người. Mỗi ảnh phát 5 giây; có nút tạm dừng, bỏ qua và bật/tắt nhạc `web/assets/2.mp3`.
+- **Phòng kỷ niệm:** ảnh treo tường, lời nhắn và các dải ảnh đã lưu trong Photobook được đồng bộ realtime.
+- Dòng trạng thái màu xanh **Realtime đang hoạt động** cho biết kết nối thành công.
 
-Nếu muốn tất cả mọi người nhìn thấy chung một album, cần kết nối kho lưu trữ/backend riêng trong bước tiếp theo.
+## Lưu ý quyền truy cập
 
-## Ảnh trên tường căn phòng
-
-Ngay tại tab **Phòng kỷ niệm**, bấm **Import Ảnh Lên Tường** để chọn nhiều ảnh cùng lúc. Bản source không còn chứa ảnh Messi hoặc ảnh mẫu cũ.
+Thiết lập hiện tại dành cho link lớp học: bất kỳ ai có link đều có thể xem và thêm/sửa nội dung. Nếu public link rộng rãi, nên bổ sung đăng nhập hoặc mã lớp trước khi cho phép ghi dữ liệu.

@@ -3247,53 +3247,49 @@
         </div>
     </main>
 
-    <!-- MEMORY REPLAY TAB -->
+    <!-- MEMORY SLIDESHOW TAB -->
     <main id="memoryTabPanel" class="hidden flex-1 items-center justify-center px-3 pb-5 overflow-y-auto">
         <section class="stardew-box w-full max-w-6xl p-3 sm:p-5 my-2">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b-4 border-[#8c4b20] pb-3 mb-4">
                 <div>
-                    <div class="inline-block bg-[#f48fb1] border-2 border-[#241106] px-2 py-0.5 text-xs font-bold mb-1">CUỐN PHIM A1K37</div>
+                    <div class="inline-block bg-[#f48fb1] border-2 border-[#241106] px-2 py-0.5 text-xs font-bold mb-1">CUỐN PHIM ẢNH A1K37</div>
                     <h2 class="text-2xl sm:text-3xl font-bold text-[#3b1e0e]">🎞️ Xem lại kỷ niệm</h2>
-                    <p class="text-sm text-[#6e3b19] mt-1">Xem video trước, rồi bấm NEXT để mở album ảnh của riêng bạn.</p>
+                    <p class="text-sm text-[#6e3b19] mt-1">Mỗi ảnh phát 5 giây · có thể tạm dừng hoặc bỏ qua · nhạc phát lặp xuyên suốt.</p>
                 </div>
-                <div class="bg-[#fff3c4] border-2 border-[#241106] px-3 py-1 text-sm font-bold text-[#3b1e0e]">
-                    Trang <span id="memoryPageNumber">1</span>/2
-                </div>
+                <div id="supabaseStatus" class="bg-[#fff3c4] border-2 border-[#241106] px-3 py-1 text-sm font-bold text-[#3b1e0e]">Đang kết nối kho ảnh…</div>
             </div>
 
-            <div id="memoryVideoPage">
-                <div class="bg-[#241106] border-4 border-[#241106] p-2 shadow-[7px_8px_0_rgba(0,0,0,0.35)] max-w-3xl mx-auto">
-                    <video id="memoryVideo" class="w-full max-h-[65vh] bg-black block" controls playsinline preload="metadata" poster="">
-                        <source src="assets/memories/video.mp4" type="video/mp4">
-                        Trình duyệt của bạn không hỗ trợ video.
-                    </video>
-                </div>
-                <p class="text-center text-sm text-[#6e3b19] mt-4 font-bold">Bật âm thanh lên nhé — đây là đoạn phim mở đầu của cuốn kỷ niệm.</p>
-            </div>
-
-            <div id="memoryGalleryPage" class="hidden">
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-4">
-                    <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-[#3b1e0e]">📷 Album do người xem đóng góp</h3>
-                        <p class="text-sm text-[#6e3b19]">Ảnh được lưu trên chính trình duyệt đang dùng và vẫn còn sau khi tải lại trang.</p>
+            <div class="grid lg:grid-cols-[1fr_280px] gap-5">
+                <div>
+                    <div class="relative bg-[#241106] border-4 border-[#241106] p-2 shadow-[7px_8px_0_rgba(0,0,0,0.35)] min-h-[360px] sm:min-h-[520px] flex items-center justify-center overflow-hidden">
+                        <img id="memorySlideImage" class="hidden absolute inset-2 w-[calc(100%_-_1rem)] h-[calc(100%_-_1rem)] object-contain bg-black" alt="Ảnh kỷ niệm đang phát">
+                        <div id="memorySlideEmpty" class="text-center text-[#fff3c4] p-8">
+                            <div class="text-7xl mb-4">🖼️</div>
+                            <p class="text-2xl font-bold">Chưa có ảnh kỷ niệm</p>
+                            <p class="text-sm mt-2 text-[#f6d49a]">Hãy thêm ảnh đầu tiên vào kho chung của lớp.</p>
+                        </div>
+                        <div id="memoryProgress" class="absolute left-2 right-2 bottom-2 h-2 bg-[#fff3c4] border-2 border-[#241106]"><span class="block h-full w-0 bg-[#e91e63]"></span></div>
                     </div>
-                    <label class="stardew-btn-pink px-4 py-2 text-base cursor-pointer flex items-center gap-2 shrink-0">
-                        <span>＋</span><span>Thêm ảnh trực tiếp</span>
-                        <input id="memoryPhotoInput" type="file" accept="image/*" multiple class="hidden" onchange="handleMemoryPhotos(event)">
-                    </label>
+                    <div class="flex flex-wrap items-center justify-between gap-3 mt-4">
+                        <div class="font-bold text-[#3b1e0e]"><span id="memorySlideCounter">0/0</span> · <span id="memorySlideCaption">Album đang trống</span></div>
+                        <div class="flex flex-wrap gap-2">
+                            <button id="memoryPlayButton" onclick="toggleMemoryPlayback()" class="stardew-btn px-4 py-2">⏸ TẠM DỪNG</button>
+                            <button onclick="nextMemorySlide()" class="stardew-btn-green px-4 py-2">NEXT ▶</button>
+                            <button onclick="toggleMemoryMusic()" id="memoryMusicButton" class="stardew-btn px-4 py-2">🔊 NHẠC</button>
+                        </div>
+                    </div>
+                    <audio id="memoryMusic" src="assets/2.mp3" loop preload="auto"></audio>
                 </div>
-                <div id="memoryGalleryEmpty" class="min-h-[300px] border-4 border-dashed border-[#b86b32] bg-[#fff8dc] flex flex-col items-center justify-center text-center p-8">
-                    <div class="text-6xl mb-3">🖼️</div>
-                    <p class="text-xl font-bold text-[#3b1e0e]">Album đang để trống</p>
-                    <p class="text-sm text-[#6e3b19] mt-2 max-w-md">Bấm “Thêm ảnh trực tiếp” để chọn nhiều ảnh từ điện thoại hoặc máy tính.</p>
-                </div>
-                <div id="memoryGalleryGrid" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-            </div>
 
-            <div class="flex items-center justify-between gap-3 border-t-4 border-[#8c4b20] pt-4 mt-5">
-                <button id="memoryPrevButton" onclick="changeMemoryPage(-1)" class="stardew-btn px-5 py-2 text-base disabled:opacity-40" disabled>◀ PREV</button>
-                <div class="flex gap-2" aria-hidden="true"><span id="memoryDot0" class="w-4 h-4 bg-[#e91e63] border-2 border-[#241106]"></span><span id="memoryDot1" class="w-4 h-4 bg-[#fff3c4] border-2 border-[#241106]"></span></div>
-                <button id="memoryNextButton" onclick="changeMemoryPage(1)" class="stardew-btn-green px-5 py-2 text-base">NEXT ▶</button>
+                <aside class="bg-[#fff8dc] border-[3px] border-[#8c4b20] p-3 shadow-[4px_5px_0_rgba(0,0,0,0.25)]">
+                    <h3 class="text-xl font-bold text-[#3b1e0e] mb-1">📷 Kho ảnh chung</h3>
+                    <p class="text-xs text-[#6e3b19] mb-3">Ảnh tải lên Supabase và mọi người đều xem được.</p>
+                    <label class="stardew-btn-pink px-3 py-2 text-base cursor-pointer flex items-center justify-center gap-2 mb-3">
+                        <span>＋</span><span>Thêm ảnh</span>
+                        <input id="memoryPhotoInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple class="hidden" onchange="handleMemoryPhotos(event)">
+                    </label>
+                    <div id="memoryThumbs" class="grid grid-cols-3 lg:grid-cols-2 gap-2 max-h-[480px] overflow-y-auto pr-1"></div>
+                </aside>
             </div>
         </section>
     </main>
@@ -3684,11 +3680,10 @@
         <span id="toastText" class="text-sm font-bold text-[#3b1e0e]">Đã lưu lời chúc lên tường!</span>
     </div>
 
-    <!-- APPLICATION LOGIC & FIREBASE CLOUD SYNC -->
+    <!-- APPLICATION LOGIC & SUPABASE CLOUD SYNC -->
+    <script src="supabase-config.js"></script>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
         // ============================================================================
         // 1. INITIAL DATA: 17 BOYS' STICKY NOTES + 14 WALL PHOTO FRAMES
@@ -3771,11 +3766,11 @@
         let isMusicPlaying = false;
         let musicInterval = null;
 
-        // Firebase Variables
-        let db = null;
-        let auth = null;
-        let currentUser = null;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'stardew-20-10-room';
+        // Supabase shared storage/database
+        let supabase = null;
+        let roomRealtimeChannel = null;
+        let memoryRealtimeChannel = null;
+        const MEDIA_BUCKET = 'a1k37-media';
 
         // ============================================================================
         // 2. SOUND SYNTHESIS (STARDEW VALLEY 8-BIT AUDIO EFFECTS)
@@ -4384,7 +4379,7 @@
         // ============================================================================
         // 5. WALL PHOTO FRAMES & BATCH PHOTO IMPORT LOGIC
         // ============================================================================
-        function compressImageFile(file, maxWidth = 520, quality = 0.78) {
+        function compressImageFile(file, maxWidth = 1280, quality = 0.82) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -4401,7 +4396,7 @@
                         canvas.height = h;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
-                        resolve(canvas.toDataURL('image/jpeg', quality));
+                        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Không thể nén ảnh')), 'image/jpeg', quality);
                     };
                     img.onerror = reject;
                     img.src = e.target.result;
@@ -4409,6 +4404,19 @@
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
+        }
+
+        async function uploadMediaBlob(blob, folder, originalName = 'image.jpg') {
+            if (!supabase) throw new Error('Supabase chưa được cấu hình');
+            const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, '-').slice(-80) || 'image.jpg';
+            const path = `${folder}/${Date.now()}-${crypto.randomUUID()}-${safeName.replace(/\.[^/.]+$/, '')}.jpg`;
+            const { error } = await supabase.storage.from(MEDIA_BUCKET).upload(path, blob, {
+                contentType: 'image/jpeg',
+                cacheControl: '3600',
+                upsert: false
+            });
+            if (error) throw error;
+            return supabase.storage.from(MEDIA_BUCKET).getPublicUrl(path).data.publicUrl;
         }
 
         window.openFrameModal = function(index) {
@@ -4450,15 +4458,16 @@
             const file = event.target.files?.[0];
             if (!file) return;
             try {
-                const compressedDataUrl = await compressImageFile(file, 560, 0.8);
-                framesState[activeFrameIndex].imageUrl = compressedDataUrl;
+                const compressedBlob = await compressImageFile(file, 1280, 0.84);
+                const publicUrl = await uploadMediaBlob(compressedBlob, 'wall', file.name);
+                framesState[activeFrameIndex].imageUrl = publicUrl;
                 const cleanName = file.name.replace(/\.[^/.]+$/, '').slice(0, 28);
                 if (!framesState[activeFrameIndex].caption || framesState[activeFrameIndex].caption.startsWith('Kỷ niệm #')) {
                     framesState[activeFrameIndex].caption = cleanName || `Kỷ niệm #${framesState[activeFrameIndex].id}`;
                     document.getElementById('frameCaptionInput').value = framesState[activeFrameIndex].caption;
                 }
 
-                document.getElementById('frameModalImage').src = compressedDataUrl;
+                document.getElementById('frameModalImage').src = publicUrl;
                 document.getElementById('frameEmptyOverlay').classList.add('hidden');
                 playSoundEffect('save');
                 renderWallItems();
@@ -4499,8 +4508,8 @@
                 if (targetIdx === -1) targetIdx = i;
 
                 try {
-                    const dataUrl = await compressImageFile(files[i], 520, 0.78);
-                    framesState[targetIdx].imageUrl = dataUrl;
+                    const compressedBlob = await compressImageFile(files[i], 1280, 0.82);
+                    framesState[targetIdx].imageUrl = await uploadMediaBlob(compressedBlob, 'wall', files[i].name);
                     const cleanName = files[i].name.replace(/\.[^/.]+$/, '').slice(0, 26);
                     framesState[targetIdx].caption = cleanName || `Ảnh 20/10 #${targetIdx + 1}`;
                     updatedCount++;
@@ -4678,8 +4687,8 @@
 
             for (let i = 0; i < 3; i++) {
                 const file = files[i % files.length];
-                const dataUrl = await compressImageFile(file, 500, 0.85);
-                const img = await loadImageElement(dataUrl);
+                const imageBlob = await compressImageFile(file, 500, 0.85);
+                const img = await loadImageBlob(imageBlob);
                 boothPhotos[i] = img;
             }
             playSoundEffect('save');
@@ -4696,8 +4705,8 @@
         window.handleSingleBoothSlotUpload = async function(event) {
             const file = event.target.files?.[0];
             if (!file) return;
-            const dataUrl = await compressImageFile(file, 500, 0.85);
-            const img = await loadImageElement(dataUrl);
+            const imageBlob = await compressImageFile(file, 500, 0.85);
+            const img = await loadImageBlob(imageBlob);
             boothPhotos[replacingSlotIndex] = img;
             playSoundEffect('save');
             renderPhotostripCanvas();
@@ -4712,6 +4721,15 @@
                 img.onerror = reject;
                 img.src = src;
             });
+        }
+
+        async function loadImageBlob(blob) {
+            const objectUrl = URL.createObjectURL(blob);
+            try {
+                return await loadImageElement(objectUrl);
+            } finally {
+                URL.revokeObjectURL(objectUrl);
+            }
         }
 
         // Render the 3-photo Photostrip onto #photostripCanvas
@@ -4823,14 +4841,19 @@
         window.saveStripToPhotobook = async function() {
             const canvas = document.getElementById('photostripCanvas');
             const caption = document.getElementById('stripCaptionInput').value.trim() || "Kỷ niệm 20/10";
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+            if (!supabase) {
+                showToast('Hãy cấu hình Supabase trước khi lưu Photobook.', '⚠️');
+                return;
+            }
+            const stripBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.86));
+            const publicUrl = await uploadMediaBlob(stripBlob, 'photobook', `photostrip-${Date.now()}.jpg`);
 
             photobookStrips.unshift({
                 id: 'strip_' + Date.now(),
                 caption: caption,
                 date: '20/10',
                 likes: 1,
-                imageUrl: dataUrl
+                imageUrl: publicUrl
             });
 
             playSoundEffect('save');
@@ -4844,20 +4867,6 @@
             const grid = document.getElementById('photobookGalleryGrid');
             if (!grid) return;
             grid.innerHTML = '';
-
-            // Ensure at least 2 cute sample strips exist on first load
-            if (photobookStrips.length === 0) {
-                const tempCanvas = document.getElementById('photostripCanvas');
-                if (tempCanvas) {
-                    photobookStrips.push({
-                        id: 'sample_1',
-                        caption: 'Hội Chị Em Xinh Đẹp 20/10 💕',
-                        date: '20/10',
-                        likes: 17,
-                        imageUrl: tempCanvas.toDataURL('image/jpeg', 0.8)
-                    });
-                }
-            }
 
             photobookStrips.forEach((strip, idx) => {
                 const card = document.createElement('div');
@@ -5233,78 +5242,91 @@
         }
 
         // ============================================================================
-        // 10. FIREBASE FIRESTORE REAL-TIME SYNC (FOLLOWING STRICT RULES)
+        // 10. SUPABASE REALTIME SYNC + SHARED MEMORY SLIDESHOW
         // ============================================================================
-        async function initFirebaseSync() {
-            try {
-                if (typeof __firebase_config === 'undefined' || !__firebase_config) return;
-                const firebaseConfig = JSON.parse(__firebase_config);
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
+        let memoryItems = [];
+        let currentMemoryIndex = 0;
+        let memoryIsPlaying = true;
+        let memoryMusicEnabled = true;
+        let memoryElapsed = 0;
+        let memoryClock = null;
 
-                // RULE 3: Auth Before Queries
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
+        function applyRoomState(data) {
+            if (!data) return;
+            if (Array.isArray(data.notes)) notesState = data.notes;
+            if (Array.isArray(data.frames)) framesState = data.frames;
+            if (Array.isArray(data.photobook)) photobookStrips = data.photobook;
+            renderWallItems();
+            updateTopBadges();
+            renderPhotobookGallery();
+        }
 
-                onAuthStateChanged(auth, (user) => {
-                    currentUser = user;
-                    if (!currentUser) return;
-
-                    // RULE 1: Strict Public Path
-                    const roomDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'room2010_state', 'main_wall');
-                    onSnapshot(
-                        roomDocRef,
-                        (snapshot) => {
-                            if (snapshot.exists()) {
-                                const data = snapshot.data();
-                                if (data.notesJson) {
-                                    try { notesState = JSON.parse(data.notesJson); } catch (e) {}
-                                }
-                                if (data.framesJson) {
-                                    try { framesState = JSON.parse(data.framesJson); } catch (e) {}
-                                }
-                                if (data.photobookJson) {
-                                    try { photobookStrips = JSON.parse(data.photobookJson); } catch (e) {}
-                                }
-                                renderWallItems();
-                            }
-                        },
-                        (error) => {
-                            console.warn('Firestore sync standby:', error);
-                        }
-                    );
-                });
-            } catch (err) {
-                // Works seamlessly in-memory if Firebase is not configured
-            }
+        async function loadRoomState() {
+            if (!supabase) return;
+            const { data, error } = await supabase.from('room_state').select('*').eq('id', 'main').maybeSingle();
+            if (error) throw error;
+            applyRoomState(data);
         }
 
         async function syncRoomDataToCloud() {
-            if (!db || !currentUser) return;
-            try {
-                const roomDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'room2010_state', 'main_wall');
-                await setDoc(roomDocRef, {
-                    notesJson: JSON.stringify(notesState),
-                    framesJson: JSON.stringify(framesState),
-                    photobookJson: JSON.stringify(photobookStrips.slice(0, 12)),
-                    updatedAt: Date.now()
-                }, { merge: true });
-            } catch (err) {
-                console.warn('Cloud sync warning:', err);
+            if (!supabase) {
+                showToast('Chưa cấu hình Supabase nên dữ liệu chưa được lưu chung.', '⚠️');
+                return;
+            }
+            const { error } = await supabase.from('room_state').upsert({
+                id: 'main',
+                notes: notesState,
+                frames: framesState,
+                photobook: photobookStrips.slice(0, 30),
+                updated_at: new Date().toISOString()
+            });
+            if (error) {
+                console.warn('Supabase room sync:', error);
+                showToast('Không thể lưu lên Supabase.', '⚠️');
             }
         }
 
-        // ============================================================================
-        // 11. MAIN TABS + LOCAL MEMORY ALBUM (INDEXEDDB)
-        // ============================================================================
-        let currentMemoryPage = 0;
-        let memoryObjectUrls = [];
-        const MEMORY_DB_NAME = 'a1k37-memory-album';
-        const MEMORY_STORE_NAME = 'photos';
+        async function loadMemoryItems() {
+            if (!supabase) {
+                renderMemoryPlayer();
+                return;
+            }
+            const { data, error } = await supabase.from('memory_items').select('*').order('created_at', { ascending: true });
+            if (error) throw error;
+            const activeId = memoryItems[currentMemoryIndex]?.id;
+            memoryItems = data || [];
+            const retainedIndex = memoryItems.findIndex(item => item.id === activeId);
+            currentMemoryIndex = retainedIndex >= 0 ? retainedIndex : Math.min(currentMemoryIndex, Math.max(0, memoryItems.length - 1));
+            memoryElapsed = 0;
+            renderMemoryPlayer();
+        }
+
+        async function initSupabaseSync() {
+            const config = window.SUPABASE_CONFIG || {};
+            const status = document.getElementById('supabaseStatus');
+            if (!config.url || !config.anonKey || config.url.includes('YOUR_PROJECT')) {
+                status.textContent = '⚠️ Chưa cấu hình Supabase';
+                status.className = 'bg-[#ffe0b2] border-2 border-[#241106] px-3 py-1 text-sm font-bold text-[#8a2c14]';
+                renderMemoryPlayer();
+                return;
+            }
+            try {
+                supabase = createClient(config.url, config.anonKey);
+                await Promise.all([loadRoomState(), loadMemoryItems()]);
+                status.textContent = '● Realtime đang hoạt động';
+                status.className = 'bg-[#c8e6c9] border-2 border-[#241106] px-3 py-1 text-sm font-bold text-[#20532b]';
+                roomRealtimeChannel = supabase.channel('room-state-live')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'room_state', filter: 'id=eq.main' }, payload => applyRoomState(payload.new))
+                    .subscribe();
+                memoryRealtimeChannel = supabase.channel('memory-items-live')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'memory_items' }, () => loadMemoryItems())
+                    .subscribe();
+            } catch (error) {
+                console.warn('Supabase init:', error);
+                status.textContent = '⚠️ Supabase chưa sẵn sàng';
+                status.className = 'bg-[#ffcdd2] border-2 border-[#241106] px-3 py-1 text-sm font-bold text-[#8a2c14]';
+            }
+        }
 
         window.switchMainTab = function(tab) {
             const showRoom = tab !== 'memories';
@@ -5313,8 +5335,7 @@
             const roomActions = document.getElementById('roomActions');
             const roomButton = document.getElementById('roomTabButton');
             const memoryButton = document.getElementById('memoriesTabButton');
-            const video = document.getElementById('memoryVideo');
-
+            const memoryMusic = document.getElementById('memoryMusic');
             roomPanel.classList.toggle('hidden', !showRoom);
             roomPanel.classList.toggle('flex', showRoom);
             memoryPanel.classList.toggle('hidden', showRoom);
@@ -5324,138 +5345,101 @@
             memoryButton.className = `${showRoom ? 'stardew-btn' : 'stardew-btn-green'} px-4 py-1.5 text-base sm:text-lg flex items-center gap-2`;
             roomButton.setAttribute('aria-pressed', String(showRoom));
             memoryButton.setAttribute('aria-pressed', String(!showRoom));
-
-            if (showRoom) {
-                video.pause();
-            } else if (currentMemoryPage === 0) {
-                video.play().catch(() => {});
-            }
+            if (showRoom) memoryMusic.pause();
+            else if (memoryMusicEnabled) memoryMusic.play().catch(() => {});
         };
 
-        window.changeMemoryPage = function(direction) {
-            currentMemoryPage = Math.max(0, Math.min(1, currentMemoryPage + direction));
-            const isVideo = currentMemoryPage === 0;
-            const videoPage = document.getElementById('memoryVideoPage');
-            const galleryPage = document.getElementById('memoryGalleryPage');
-            const video = document.getElementById('memoryVideo');
-            videoPage.classList.toggle('hidden', !isVideo);
-            galleryPage.classList.toggle('hidden', isVideo);
-            document.getElementById('memoryPageNumber').textContent = String(currentMemoryPage + 1);
-            document.getElementById('memoryPrevButton').disabled = isVideo;
-            const nextButton = document.getElementById('memoryNextButton');
-            nextButton.disabled = !isVideo;
-            nextButton.textContent = isVideo ? 'NEXT ▶' : 'HẾT ✓';
-            document.getElementById('memoryDot0').style.backgroundColor = isVideo ? '#e91e63' : '#fff3c4';
-            document.getElementById('memoryDot1').style.backgroundColor = isVideo ? '#fff3c4' : '#e91e63';
-            if (isVideo) video.play().catch(() => {}); else video.pause();
+        function renderMemoryPlayer() {
+            const image = document.getElementById('memorySlideImage');
+            const empty = document.getElementById('memorySlideEmpty');
+            const counter = document.getElementById('memorySlideCounter');
+            const caption = document.getElementById('memorySlideCaption');
+            const thumbs = document.getElementById('memoryThumbs');
+            const item = memoryItems[currentMemoryIndex];
+            image.classList.toggle('hidden', !item);
+            empty.classList.toggle('hidden', Boolean(item));
+            image.src = item?.image_url || '';
+            counter.textContent = item ? `${currentMemoryIndex + 1}/${memoryItems.length}` : '0/0';
+            caption.textContent = item?.caption || 'Album đang trống';
+            thumbs.innerHTML = '';
+            memoryItems.forEach((photo, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `relative border-[3px] ${index === currentMemoryIndex ? 'border-[#e91e63]' : 'border-[#241106]'} bg-white p-1`;
+                button.onclick = () => selectMemorySlide(index);
+                const thumb = document.createElement('img');
+                thumb.src = photo.image_url;
+                thumb.alt = photo.caption || `Kỷ niệm ${index + 1}`;
+                thumb.className = 'w-full aspect-square object-cover';
+                button.appendChild(thumb);
+                thumbs.appendChild(button);
+            });
+            resetMemoryProgress();
+        }
+
+        function selectMemorySlide(index) {
+            if (!memoryItems.length) return;
+            currentMemoryIndex = (index + memoryItems.length) % memoryItems.length;
+            memoryElapsed = 0;
+            renderMemoryPlayer();
+        }
+
+        function resetMemoryProgress() {
+            const bar = document.querySelector('#memoryProgress span');
+            if (bar) bar.style.width = `${Math.min(100, memoryElapsed / 5000 * 100)}%`;
+        }
+
+        window.nextMemorySlide = function() {
+            if (!memoryItems.length) return;
+            selectMemorySlide(currentMemoryIndex + 1);
         };
 
-        function openMemoryDatabase() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(MEMORY_DB_NAME, 1);
-                request.onupgradeneeded = () => {
-                    const dbInstance = request.result;
-                    if (!dbInstance.objectStoreNames.contains(MEMORY_STORE_NAME)) {
-                        dbInstance.createObjectStore(MEMORY_STORE_NAME, { keyPath: 'id', autoIncrement: true });
-                    }
-                };
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
+        window.toggleMemoryPlayback = function() {
+            memoryIsPlaying = !memoryIsPlaying;
+            document.getElementById('memoryPlayButton').textContent = memoryIsPlaying ? '⏸ TẠM DỪNG' : '▶ TIẾP TỤC';
+        };
 
-        async function getMemoryPhotos() {
-            const dbInstance = await openMemoryDatabase();
-            return new Promise((resolve, reject) => {
-                const transaction = dbInstance.transaction(MEMORY_STORE_NAME, 'readonly');
-                const request = transaction.objectStore(MEMORY_STORE_NAME).getAll();
-                request.onsuccess = () => resolve(request.result.sort((a, b) => b.createdAt - a.createdAt));
-                request.onerror = () => reject(request.error);
-                transaction.oncomplete = () => dbInstance.close();
-            });
-        }
+        window.toggleMemoryMusic = function() {
+            const audio = document.getElementById('memoryMusic');
+            memoryMusicEnabled = !memoryMusicEnabled;
+            if (memoryMusicEnabled) audio.play().catch(() => {}); else audio.pause();
+            document.getElementById('memoryMusicButton').textContent = memoryMusicEnabled ? '🔊 NHẠC' : '🔇 NHẠC';
+        };
 
         window.handleMemoryPhotos = async function(event) {
-            const files = Array.from(event.target.files || []).filter(file => file.type.startsWith('image/'));
+            const files = Array.from(event.target.files || []).filter(file => file.type.startsWith('image/')).slice(0, 30);
             if (!files.length) return;
-            const validFiles = files.filter(file => file.size <= 10 * 1024 * 1024).slice(0, 30);
-            if (!validFiles.length) {
-                showToast('Ảnh phải nhỏ hơn 10 MB.', '⚠️');
+            if (!supabase) {
+                showToast('Cần cấu hình Supabase trước khi thêm ảnh.', '⚠️');
                 event.target.value = '';
                 return;
             }
-            try {
-                const dbInstance = await openMemoryDatabase();
-                await new Promise((resolve, reject) => {
-                    const transaction = dbInstance.transaction(MEMORY_STORE_NAME, 'readwrite');
-                    const store = transaction.objectStore(MEMORY_STORE_NAME);
-                    validFiles.forEach(file => store.add({ blob: file, name: file.name, createdAt: Date.now() + Math.random() }));
-                    transaction.oncomplete = resolve;
-                    transaction.onerror = () => reject(transaction.error);
-                });
-                dbInstance.close();
-                await renderMemoryGallery();
-                showToast(`Đã thêm ${validFiles.length} ảnh vào album trên máy này!`, '📷');
-            } catch (error) {
-                showToast('Không thể lưu ảnh trên trình duyệt này.', '⚠️');
+            showToast(`Đang tải ${files.length} ảnh lên kho chung…`, '⏳');
+            let uploaded = 0;
+            for (const file of files) {
+                if (file.size > 10 * 1024 * 1024) continue;
+                try {
+                    const blob = await compressImageFile(file, 1920, 0.86);
+                    const imageUrl = await uploadMediaBlob(blob, 'memories', file.name);
+                    const caption = file.name.replace(/\.[^/.]+$/, '').slice(0, 80) || 'Kỷ niệm A1K37';
+                    const { error } = await supabase.from('memory_items').insert({ image_url: imageUrl, storage_path: new URL(imageUrl).pathname.split('/a1k37-media/')[1], caption });
+                    if (error) throw error;
+                    uploaded++;
+                } catch (error) {
+                    console.warn('Memory upload:', error);
+                }
             }
+            await loadMemoryItems();
+            showToast(`Đã thêm ${uploaded} ảnh vào kho chung!`, '📷');
             event.target.value = '';
         };
 
-        window.deleteMemoryPhoto = async function(id) {
-            try {
-                const dbInstance = await openMemoryDatabase();
-                await new Promise((resolve, reject) => {
-                    const transaction = dbInstance.transaction(MEMORY_STORE_NAME, 'readwrite');
-                    transaction.objectStore(MEMORY_STORE_NAME).delete(id);
-                    transaction.oncomplete = resolve;
-                    transaction.onerror = () => reject(transaction.error);
-                });
-                dbInstance.close();
-                await renderMemoryGallery();
-                showToast('Đã xóa ảnh khỏi album trên máy này.', '🗑️');
-            } catch (error) {
-                showToast('Chưa thể xóa ảnh, thử lại nhé.', '⚠️');
-            }
-        };
-
-        async function renderMemoryGallery() {
-            const grid = document.getElementById('memoryGalleryGrid');
-            const empty = document.getElementById('memoryGalleryEmpty');
-            if (!grid || !empty || !('indexedDB' in window)) return;
-            try {
-                const photos = await getMemoryPhotos();
-                memoryObjectUrls.forEach(url => URL.revokeObjectURL(url));
-                memoryObjectUrls = [];
-                grid.innerHTML = '';
-                empty.classList.toggle('hidden', photos.length > 0);
-                grid.classList.toggle('hidden', photos.length === 0);
-                photos.forEach(photo => {
-                    const card = document.createElement('article');
-                    card.className = 'relative bg-white border-[3px] border-[#241106] p-2 pb-9 shadow-[5px_6px_0_rgba(0,0,0,0.3)] rotate-[var(--tilt)]';
-                    card.style.setProperty('--tilt', `${((photo.id % 5) - 2) * 0.7}deg`);
-                    const image = document.createElement('img');
-                    const imageUrl = URL.createObjectURL(photo.blob);
-                    memoryObjectUrls.push(imageUrl);
-                    image.src = imageUrl;
-                    image.alt = photo.name || 'Ảnh kỷ niệm';
-                    image.className = 'w-full aspect-square object-cover border-2 border-[#6e3b19] bg-[#f2d7aa]';
-                    const caption = document.createElement('p');
-                    caption.className = 'absolute left-2 right-10 bottom-2 text-xs font-bold text-[#3b1e0e] truncate';
-                    caption.textContent = photo.name || 'Kỷ niệm A1K37';
-                    const removeButton = document.createElement('button');
-                    removeButton.type = 'button';
-                    removeButton.className = 'absolute right-2 bottom-1.5 w-7 h-7 bg-[#ef5350] text-white border-2 border-[#241106] font-bold';
-                    removeButton.title = 'Xóa ảnh này';
-                    removeButton.textContent = '×';
-                    removeButton.onclick = () => window.deleteMemoryPhoto(photo.id);
-                    card.append(image, caption, removeButton);
-                    grid.appendChild(card);
-                });
-            } catch (error) {
-                empty.querySelector('p').textContent = 'Trình duyệt chưa cho phép lưu album.';
-            }
-        }
+        memoryClock = setInterval(() => {
+            if (!memoryIsPlaying || !memoryItems.length || document.getElementById('memoryTabPanel').classList.contains('hidden')) return;
+            memoryElapsed += 100;
+            resetMemoryProgress();
+            if (memoryElapsed >= 5000) nextMemorySlide();
+        }, 100);
 
         // ============================================================================
         // 12. INITIALIZE ON WINDOW LOAD
@@ -5467,8 +5451,7 @@
             renderWallItems();
             initPetalsCanvas();
             initAnimalsRoaming();
-            initFirebaseSync();
-            renderMemoryGallery();
+            initSupabaseSync();
             if (new URLSearchParams(window.location.search).get('tab') === 'memories') {
                 switchMainTab('memories');
             }
