@@ -19,7 +19,7 @@ Mọi thứ cần sửa nằm trong `dist/config.js`:
 - Chép ảnh vào `dist/assets/photos/` và đặt tên `photo-01.jpg` đến `photo-04.jpg`, hoặc đổi đường dẫn trong `photos`.
 - Sửa `className`, lời nhắn từng ảnh và `finalWish`.
 - Con trỏ mặc định là emoji. Muốn dùng ảnh riêng, chép ảnh PNG nền trong suốt vào `dist/assets/cursor.png`, rồi đặt `cursorImage: "assets/cursor.png"`.
-- Muốn có nhạc nền, chép file vào `dist/assets/music.mp3`. Nên dùng file nhỏ hơn 3 MB.
+- Muốn có nhạc nền, chép file MP3 vào `dist/assets/music.mp3`. Nên dùng file nhỏ hơn 3 MB. Nếu file có tên khác, sửa `musicFile` trong `dist/config.js`, ví dụ `musicFile: "assets/nhac-20-10.mp3"`.
 
 ## Bật bảng hoa chung cho mọi thiết bị
 

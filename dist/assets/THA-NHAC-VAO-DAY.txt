@@ -1,0 +1,8 @@
+Đặt file nhạc nền trong thư mục này và đặt tên là:
+
+music.mp3
+
+Đường dẫn đầy đủ sẽ là:
+dist/assets/music.mp3
+
+Nếu muốn giữ tên file khác, mở dist/config.js và sửa dòng musicFile.

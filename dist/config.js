@@ -3,7 +3,8 @@ window.GIFT_CONFIG = {
   eventDate: "20 · 10",
   cursorEmoji: "🌷",
   cursorImage: "", // Ví dụ: "assets/cursor.png"
-  musicFile: "assets/music.mp3", // Để trống nếu không dùng nhạc
+  // Chép bài hát vào dist/assets/music.mp3. Nếu đổi tên file, sửa đường dẫn ngay dưới đây.
+  musicFile: "assets/music.mp3", // Ví dụ: "assets/nhac-20-10.mp3"; để "" nếu không dùng nhạc
   photos: [
     { file: "assets/photos/photo-01.jpg", label: "Những khoảnh khắc rất chúng mình", note: "Cảm ơn vì đã làm lớp học này nhiều màu sắc hơn." },
     { file: "assets/photos/photo-02.jpg", label: "Một chút đáng yêu mỗi ngày", note: "Mong mọi nụ cười luôn được giữ lại thật lâu." },
