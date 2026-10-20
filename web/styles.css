@@ -37,3 +37,11 @@ button.runaway:active{transform:translateX(-50%);box-shadow:0 4px 0 #b63e54}
 button.runaway.is-running:active{transform:none;box-shadow:0 4px 0 #b63e54}
 @media(max-height:540px){.start-screen{padding:12px}.start-card{width:min(620px,86vw);padding:28px 42px;transform:translateY(-7px) rotate(-1deg)}.start-card h1{margin:8px 0;font-size:clamp(32px,8vh,48px)}.start-card p{font-size:13px}.tape{height:25px;top:-12px}.doodle{font-size:44px}button.runaway{bottom:7vh;padding:13px 22px}.start-hint{bottom:1vh;font-size:17px}.audio-dock{right:10px;bottom:10px}}
 @media(max-height:390px){.start-card{padding:22px 38px;transform:translateY(-16px) rotate(-1deg)}.start-card h1{font-size:31px}.start-card p{display:none}button.runaway{bottom:8vh}.start-hint{display:none}}
+
+/* Airier photo layout: the supporting frames no longer hide the main memory. */
+.story-slide .composition .frame:nth-child(1){left:3%;top:7%;right:auto;bottom:auto;width:48%;height:61%;z-index:3;--r:-3deg}
+.story-slide .composition .frame:nth-child(2){left:auto;right:3%;top:10%;bottom:auto;width:39%;height:43%;z-index:2;--r:4deg}
+.story-slide .composition .frame:nth-child(3){left:17%;right:auto;top:auto;bottom:4%;width:36%;height:35%;z-index:4;--r:2deg}
+.story-slide .composition .frame:nth-child(4){left:auto;right:8%;top:auto;bottom:4%;width:31%;height:32%;z-index:1;--r:-4deg}
+.story-slide .composition .frame:nth-child(n+5){display:none}
+@media(max-width:820px){.story-slide .composition .frame:nth-child(1){left:7%;top:16%;width:59%;height:53%}.story-slide .composition .frame:nth-child(2){right:6%;top:9%;width:37%;height:31%}.story-slide .composition .frame:nth-child(3){left:8%;bottom:8%;width:37%;height:27%}.story-slide .composition .frame:nth-child(4){right:8%;bottom:9%;width:33%;height:25%}}
