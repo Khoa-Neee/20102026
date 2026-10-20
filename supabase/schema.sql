@@ -20,6 +20,8 @@ create table if not exists public.memory_items (
     created_at timestamptz not null default now()
 );
 
+alter table public.memory_items add column if not exists kind text not null default 'photo';
+
 alter table public.room_state enable row level security;
 alter table public.memory_items enable row level security;
 
@@ -38,7 +40,7 @@ create policy "public memories update" on public.memory_items for update to anon
 create policy "public memories delete" on public.memory_items for delete to anon, authenticated using (true);
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('a1k37-media', 'a1k37-media', true, 10485760, array['image/jpeg', 'image/png', 'image/webp'])
+values ('a1k37-media', 'a1k37-media', true, 52428800, array['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm', 'video/quicktime'])
 on conflict (id) do update set public = excluded.public, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "public media read" on storage.objects;

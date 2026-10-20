@@ -3250,23 +3250,15 @@
     <!-- MEMORY SLIDESHOW TAB -->
     <main id="memoryTabPanel" class="hidden flex-1 items-center justify-center px-3 pb-5 overflow-y-auto">
         <section class="stardew-box w-full max-w-6xl p-3 sm:p-5 my-2">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b-4 border-[#8c4b20] pb-3 mb-4">
-                <div>
-                    <div class="inline-block bg-[#f48fb1] border-2 border-[#241106] px-2 py-0.5 text-xs font-bold mb-1">CUỐN PHIM ẢNH A1K37</div>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-[#3b1e0e]">🎞️ Xem lại kỷ niệm</h2>
-                    <p class="text-sm text-[#6e3b19] mt-1">Mỗi ảnh phát 5 giây · có thể tạm dừng hoặc bỏ qua · nhạc phát lặp xuyên suốt.</p>
-                </div>
-                <div id="supabaseStatus" class="bg-[#fff3c4] border-2 border-[#241106] px-3 py-1 text-sm font-bold text-[#3b1e0e]">Đang kết nối kho ảnh…</div>
-            </div>
-
             <div class="grid lg:grid-cols-[1fr_280px] gap-5">
                 <div>
                     <div class="relative bg-[#241106] border-4 border-[#241106] p-2 shadow-[7px_8px_0_rgba(0,0,0,0.35)] min-h-[360px] sm:min-h-[520px] flex items-center justify-center overflow-hidden">
                         <img id="memorySlideImage" class="hidden absolute inset-2 w-[calc(100%_-_1rem)] h-[calc(100%_-_1rem)] object-contain bg-black" alt="Ảnh kỷ niệm đang phát">
+                        <video id="memorySlideVideo" class="hidden absolute inset-2 w-[calc(100%_-_1rem)] h-[calc(100%_-_1rem)] object-contain bg-black" playsinline controls></video>
                         <div id="memorySlideEmpty" class="text-center text-[#fff3c4] p-8">
                             <div class="text-7xl mb-4">🖼️</div>
                             <p class="text-2xl font-bold">Chưa có ảnh kỷ niệm</p>
-                            <p class="text-sm mt-2 text-[#f6d49a]">Hãy thêm ảnh đầu tiên vào kho chung của lớp.</p>
+                            <p class="text-sm mt-2 text-[#f6d49a]">Hãy thêm ảnh hoặc video đầu tiên vào kho chung của lớp.</p>
                         </div>
                         <div id="memoryProgress" class="absolute left-2 right-2 bottom-2 h-2 bg-[#fff3c4] border-2 border-[#241106]"><span class="block h-full w-0 bg-[#e91e63]"></span></div>
                     </div>
@@ -3282,11 +3274,16 @@
                 </div>
 
                 <aside class="bg-[#fff8dc] border-[3px] border-[#8c4b20] p-3 shadow-[4px_5px_0_rgba(0,0,0,0.25)]">
+                    <div id="supabaseStatus" class="bg-[#fff3c4] border-2 border-[#241106] px-3 py-1 text-sm font-bold text-[#3b1e0e] text-center mb-3">Đang kết nối kho ảnh…</div>
                     <h3 class="text-xl font-bold text-[#3b1e0e] mb-1">📷 Kho ảnh chung</h3>
-                    <p class="text-xs text-[#6e3b19] mb-3">Ảnh tải lên Supabase và mọi người đều xem được.</p>
-                    <label class="stardew-btn-pink px-3 py-2 text-base cursor-pointer flex items-center justify-center gap-2 mb-3">
+                    <p class="text-xs text-[#6e3b19] mb-3">Ảnh/video tải lên Supabase và mọi người đều xem được.</p>
+                    <label class="stardew-btn-pink px-3 py-2 text-base cursor-pointer flex items-center justify-center gap-2 mb-2">
                         <span>＋</span><span>Thêm ảnh</span>
                         <input id="memoryPhotoInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple class="hidden" onchange="handleMemoryPhotos(event)">
+                    </label>
+                    <label class="stardew-btn px-3 py-2 text-base cursor-pointer flex items-center justify-center gap-2 mb-3">
+                        <span>🎬</span><span>Thêm video</span>
+                        <input id="memoryVideoInput" type="file" accept="video/mp4,video/webm,video/quicktime" multiple class="hidden" onchange="handleMemoryVideos(event)">
                     </label>
                     <div id="memoryThumbs" class="grid grid-cols-3 lg:grid-cols-2 gap-2 max-h-[480px] overflow-y-auto pr-1"></div>
                 </aside>
@@ -4406,12 +4403,22 @@
             });
         }
 
-        async function uploadMediaBlob(blob, folder, originalName = 'image.jpg') {
+        const MEDIA_CONTENT_TYPE_EXT = {
+            'image/jpeg': '.jpg',
+            'image/png': '.png',
+            'image/webp': '.webp',
+            'video/mp4': '.mp4',
+            'video/webm': '.webm',
+            'video/quicktime': '.mov'
+        };
+
+        async function uploadMediaBlob(blob, folder, originalName = 'image.jpg', contentType = 'image/jpeg') {
             if (!supabase) throw new Error('Supabase chưa được cấu hình');
-            const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, '-').slice(-80) || 'image.jpg';
-            const path = `${folder}/${Date.now()}-${crypto.randomUUID()}-${safeName.replace(/\.[^/.]+$/, '')}.jpg`;
+            const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, '-').slice(-80) || 'media';
+            const ext = MEDIA_CONTENT_TYPE_EXT[contentType] || '';
+            const path = `${folder}/${Date.now()}-${crypto.randomUUID()}-${safeName.replace(/\.[^/.]+$/, '')}${ext}`;
             const { error } = await supabase.storage.from(MEDIA_BUCKET).upload(path, blob, {
-                contentType: 'image/jpeg',
+                contentType,
                 cacheControl: '3600',
                 upsert: false
             });
@@ -5336,6 +5343,7 @@
             const roomButton = document.getElementById('roomTabButton');
             const memoryButton = document.getElementById('memoriesTabButton');
             const memoryMusic = document.getElementById('memoryMusic');
+            const memoryVideo = document.getElementById('memorySlideVideo');
             roomPanel.classList.toggle('hidden', !showRoom);
             roomPanel.classList.toggle('flex', showRoom);
             memoryPanel.classList.toggle('hidden', showRoom);
@@ -5345,20 +5353,53 @@
             memoryButton.className = `${showRoom ? 'stardew-btn' : 'stardew-btn-green'} px-4 py-1.5 text-base sm:text-lg flex items-center gap-2`;
             roomButton.setAttribute('aria-pressed', String(showRoom));
             memoryButton.setAttribute('aria-pressed', String(!showRoom));
-            if (showRoom) memoryMusic.pause();
-            else if (memoryMusicEnabled) memoryMusic.play().catch(() => {});
+            if (showRoom) {
+                memoryMusic.pause();
+                memoryVideo.pause();
+            } else if (isMemoryVideo(memoryItems[currentMemoryIndex])) {
+                memoryMusic.pause();
+                memoryVideo.play().catch(() => {});
+            } else if (memoryMusicEnabled) {
+                memoryMusic.play().catch(() => {});
+            }
         };
+
+        function isMemoryVideo(item) {
+            return Boolean(item && (item.kind === 'video' || /\.(mp4|webm|mov)(\?|$)/i.test(item.image_url || '')));
+        }
 
         function renderMemoryPlayer() {
             const image = document.getElementById('memorySlideImage');
+            const video = document.getElementById('memorySlideVideo');
             const empty = document.getElementById('memorySlideEmpty');
             const counter = document.getElementById('memorySlideCounter');
             const caption = document.getElementById('memorySlideCaption');
             const thumbs = document.getElementById('memoryThumbs');
+            const memoryMusic = document.getElementById('memoryMusic');
             const item = memoryItems[currentMemoryIndex];
-            image.classList.toggle('hidden', !item);
+            const showVideo = isMemoryVideo(item);
+            const tabVisible = !document.getElementById('memoryTabPanel').classList.contains('hidden');
+            image.classList.toggle('hidden', !item || showVideo);
+            video.classList.toggle('hidden', !showVideo);
             empty.classList.toggle('hidden', Boolean(item));
-            image.src = item?.image_url || '';
+            if (showVideo) {
+                if (video.dataset.src !== item.image_url) {
+                    video.dataset.src = item.image_url;
+                    video.src = item.image_url;
+                    video.load();
+                    if (tabVisible && memoryIsPlaying) video.play().catch(() => {});
+                }
+                memoryMusic.pause();
+            } else {
+                if (video.dataset.src) {
+                    video.pause();
+                    video.removeAttribute('src');
+                    video.load();
+                    delete video.dataset.src;
+                }
+                if (tabVisible && memoryMusicEnabled) memoryMusic.play().catch(() => {});
+            }
+            image.src = (!item || showVideo) ? '' : item.image_url;
             counter.textContent = item ? `${currentMemoryIndex + 1}/${memoryItems.length}` : '0/0';
             caption.textContent = item?.caption || 'Album đang trống';
             thumbs.innerHTML = '';
@@ -5367,11 +5408,25 @@
                 button.type = 'button';
                 button.className = `relative border-[3px] ${index === currentMemoryIndex ? 'border-[#e91e63]' : 'border-[#241106]'} bg-white p-1`;
                 button.onclick = () => selectMemorySlide(index);
-                const thumb = document.createElement('img');
-                thumb.src = photo.image_url;
-                thumb.alt = photo.caption || `Kỷ niệm ${index + 1}`;
-                thumb.className = 'w-full aspect-square object-cover';
-                button.appendChild(thumb);
+                if (isMemoryVideo(photo)) {
+                    const badge = document.createElement('div');
+                    badge.className = 'w-full aspect-square bg-[#241106] flex flex-col items-center justify-center text-[#fff3c4]';
+                    const icon = document.createElement('span');
+                    icon.textContent = '🎬';
+                    icon.className = 'text-2xl';
+                    const label = document.createElement('span');
+                    label.textContent = 'Video';
+                    label.className = 'text-xs font-bold';
+                    badge.appendChild(icon);
+                    badge.appendChild(label);
+                    button.appendChild(badge);
+                } else {
+                    const thumb = document.createElement('img');
+                    thumb.src = photo.image_url;
+                    thumb.alt = photo.caption || `Kỷ niệm ${index + 1}`;
+                    thumb.className = 'w-full aspect-square object-cover';
+                    button.appendChild(thumb);
+                }
                 thumbs.appendChild(button);
             });
             resetMemoryProgress();
@@ -5386,7 +5441,12 @@
 
         function resetMemoryProgress() {
             const bar = document.querySelector('#memoryProgress span');
-            if (bar) bar.style.width = `${Math.min(100, memoryElapsed / 5000 * 100)}%`;
+            if (!bar) return;
+            if (isMemoryVideo(memoryItems[currentMemoryIndex])) {
+                bar.style.width = '0%';
+                return;
+            }
+            bar.style.width = `${Math.min(100, memoryElapsed / 5000 * 100)}%`;
         }
 
         window.nextMemorySlide = function() {
@@ -5396,6 +5456,10 @@
 
         window.toggleMemoryPlayback = function() {
             memoryIsPlaying = !memoryIsPlaying;
+            const video = document.getElementById('memorySlideVideo');
+            if (!video.classList.contains('hidden')) {
+                if (memoryIsPlaying) video.play().catch(() => {}); else video.pause();
+            }
             document.getElementById('memoryPlayButton').textContent = memoryIsPlaying ? '⏸ TẠM DỪNG' : '▶ TIẾP TỤC';
         };
 
@@ -5434,12 +5498,52 @@
             event.target.value = '';
         };
 
+        window.handleMemoryVideos = async function(event) {
+            const files = Array.from(event.target.files || []).filter(file => file.type.startsWith('video/')).slice(0, 5);
+            if (!files.length) return;
+            if (!supabase) {
+                showToast('Cần cấu hình Supabase trước khi thêm video.', '⚠️');
+                event.target.value = '';
+                return;
+            }
+            showToast(`Đang tải ${files.length} video lên kho chung…`, '⏳');
+            let uploaded = 0;
+            for (const file of files) {
+                if (file.size > 50 * 1024 * 1024) {
+                    showToast(`${file.name} nặng quá 50MB nên chưa tải được.`, '⚠️');
+                    continue;
+                }
+                try {
+                    const videoUrl = await uploadMediaBlob(file, 'memories', file.name, file.type || 'video/mp4');
+                    const caption = file.name.replace(/\.[^/.]+$/, '').slice(0, 80) || 'Video kỷ niệm A1K37';
+                    const { error } = await supabase.from('memory_items').insert({
+                        image_url: videoUrl,
+                        storage_path: new URL(videoUrl).pathname.split('/a1k37-media/')[1],
+                        caption,
+                        kind: 'video'
+                    });
+                    if (error) throw error;
+                    uploaded++;
+                } catch (error) {
+                    console.warn('Video upload:', error);
+                    showToast(`Không tải được video ${file.name}. Hãy chắc chắn đã chạy lại supabase/schema.sql.`, '⚠️');
+                }
+            }
+            await loadMemoryItems();
+            showToast(`Đã thêm ${uploaded} video vào kho chung!`, '🎬');
+            event.target.value = '';
+        };
+
         memoryClock = setInterval(() => {
-            if (!memoryIsPlaying || !memoryItems.length || document.getElementById('memoryTabPanel').classList.contains('hidden')) return;
+            if (!memoryIsPlaying || !memoryItems.length || isMemoryVideo(memoryItems[currentMemoryIndex]) || document.getElementById('memoryTabPanel').classList.contains('hidden')) return;
             memoryElapsed += 100;
             resetMemoryProgress();
             if (memoryElapsed >= 5000) nextMemorySlide();
         }, 100);
+
+        document.getElementById('memorySlideVideo').addEventListener('ended', () => {
+            nextMemorySlide();
+        });
 
         // ============================================================================
         // 12. INITIALIZE ON WINDOW LOAD

@@ -21,9 +21,13 @@ Khóa `anon`/publishable được phép nằm trong frontend. Tuyệt đối kh�
 
 ## 3. Cách hoạt động
 
-- **Xem lại kỷ niệm:** bấm **Thêm ảnh vào album chung**. Ảnh được tải thẳng lên Supabase Storage và tự xuất hiện với mọi người. Mỗi ảnh phát 5 giây; có nút tạm dừng, bỏ qua và bật/tắt nhạc `web/assets/2.mp3`.
+- **Xem lại kỷ niệm:** vào tab là thấy luôn màn chiếu (không còn khối tiêu đề đầu trang). Bấm **Thêm ảnh** hoặc **Thêm video** để tải lên kho chung Supabase, mọi người thấy ngay qua realtime. Ảnh phát 5 giây; video phát trọn bộ với thanh điều khiển, hết video tự chuyển mục tiếp theo; có nút tạm dừng, NEXT và bật/tắt nhạc `web/assets/2.mp3` (nhạc tự tắt khi tới video và bật lại khi về ảnh).
 - **Phòng kỷ niệm:** ảnh treo tường, lời nhắn và các dải ảnh đã lưu trong Photobook được đồng bộ realtime.
-- Dòng trạng thái màu xanh **Realtime đang hoạt động** cho biết kết nối thành công.
+- Dòng trạng thái **Realtime đang hoạt động** nằm trong khung **Kho ảnh chung**, cho biết kết nối thành công.
+
+## 4. Bắt buộc: chạy lại schema khi trước đây đã chạy bản cũ
+
+Nếu bạn đã chạy `supabase/schema.sql` trước khi có chức năng video, hãy chạy **lại toàn bộ file** này một lần nữa trong SQL Editor. File viết an toàn để chạy nhiều lần (idempotent); lần chạy lại sẽ thêm cột `kind` vào bảng `memory_items` và nâng giới hạn bucket lên 50MB cho phép video mp4/webm/mov.
 
 ## Lưu ý quyền truy cập
 
