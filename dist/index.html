@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff2f4">
+  <meta name="description" content="Một món quà nhỏ dành tặng các bạn nữ nhân ngày 20/10.">
+  <title>Vườn hoa 20/10</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="paper-noise" aria-hidden="true"></div>
+  <div id="cursor" class="custom-cursor" aria-hidden="true"><span>🌷</span></div>
+  <div id="petals" class="petals" aria-hidden="true"></div>
+
+  <button id="soundToggle" class="sound-toggle" type="button" aria-label="Bật hoặc tắt nhạc" title="Bật/tắt nhạc">♪</button>
+  <audio id="bgMusic" loop preload="none"></audio>
+
+  <main>
+    <section id="startScreen" class="start-screen" aria-labelledby="startTitle">
+      <div class="start-card">
+        <p class="eyebrow">MỘT MÓN QUÀ NHỎ · 20/10</p>
+        <h1 id="startTitle">Có điều này<br><em>muốn gửi đến bạn…</em></h1>
+        <p class="start-copy">Bắt đầu nhé? Nhưng chiếc nút này hơi tinh nghịch một chút.</p>
+        <div class="doodle doodle-flower">✿</div>
+        <div class="doodle doodle-heart">♡</div>
+        <div class="tape tape-a"></div>
+        <div class="tape tape-b"></div>
+      </div>
+      <button id="runawayStart" class="runaway-start" type="button">BẮT ĐẦU <span>→</span></button>
+      <p id="startHint" class="start-hint" aria-live="polite">Bắt được tao đi 😝</p>
+    </section>
+
+    <section id="memoryScene" class="scene memory-scene" aria-labelledby="memoryTitle" hidden>
+      <header class="scene-heading reveal">
+        <span class="chapter">CHƯƠNG 01</span>
+        <h2 id="memoryTitle">Một cuốn album<br><em>của riêng lớp mình</em></h2>
+        <p>Mỗi lần chạm là một tấm ảnh, một lời nhắn.</p>
+      </header>
+
+      <div id="photoStage" class="photo-stage" aria-live="polite"></div>
+
+      <div class="memory-controls reveal">
+        <div class="progress-track" aria-hidden="true"><span id="memoryProgress"></span></div>
+        <button id="nextMemory" class="primary-btn" type="button">Mở tấm đầu tiên <span>↗</span></button>
+      </div>
+    </section>
+
+    <section id="transitionScene" class="scene letter-scene" aria-labelledby="letterTitle" hidden>
+      <div class="letter-wrap reveal">
+        <div class="envelope" aria-hidden="true">
+          <div class="envelope-back"></div><div class="letter-paper">20/10</div><div class="envelope-front"></div>
+        </div>
+        <div class="letter-copy">
+          <span class="chapter">CHƯƠNG 02</span>
+          <h2 id="letterTitle">Lời chúc thì chưa đủ…</h2>
+          <p>Tự tay ghép một bó hoa mới đúng là có tâm. Chọn những bông bạn thích, xếp chúng vào giấy gói rồi ghi tên lên nhé.</p>
+          <button id="goToGame" class="primary-btn" type="button">Đi hái hoa thôi <span>✦</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameScene" class="scene game-scene" aria-labelledby="gameTitle" hidden>
+      <header class="scene-heading compact reveal">
+        <span class="chapter">CHƯƠNG 03 · MINI GAME</span>
+        <h2 id="gameTitle">Xưởng hoa 20/10</h2>
+        <p>Chạm hoặc kéo hoa vào bó. Tối thiểu 3 bông nhé!</p>
+      </header>
+
+      <div class="flower-workshop reveal">
+        <aside class="flower-palette" aria-label="Kệ hoa">
+          <div class="palette-title"><span>Hoa tươi hôm nay</span><small>chọn tối đa 12</small></div>
+          <div id="flowerChoices" class="flower-choices"></div>
+        </aside>
+
+        <div class="bouquet-panel">
+          <div id="bouquetDrop" class="bouquet-drop" aria-label="Khu vực ghép bó hoa">
+            <div class="bouquet-glow"></div>
+            <div id="arrangement" class="arrangement"></div>
+            <div class="wrapper-paper"><span></span></div>
+            <div class="ribbon">♡</div>
+            <p id="dropHint">thả hoa vào đây</p>
+          </div>
+          <button id="clearBouquet" class="text-btn" type="button">Làm lại bó hoa</button>
+        </div>
+
+        <form id="nameForm" class="name-card">
+          <span class="mini-label">TẤM THẺ ĐÍNH KÈM</span>
+          <label for="recipientName">Đây là hoa của…</label>
+          <input id="recipientName" name="recipientName" type="text" maxlength="30" placeholder="Nhập tên của bạn" autocomplete="name" required>
+          <button class="primary-btn" type="submit">Ghim lên bảng <span>→</span></button>
+          <p id="formStatus" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <section id="boardScene" class="scene board-scene" aria-labelledby="boardTitle" hidden>
+      <header class="board-heading reveal">
+        <span class="chalk-label">BẢNG HOA CỦA LỚP</span>
+        <h2 id="boardTitle">Mỗi người một sắc,<br>cả lớp thành một vườn hoa.</h2>
+        <p id="boardMode">Những bó hoa đã được ghim ở đây ✿</p>
+      </header>
+      <div id="bouquetBoard" class="bouquet-board reveal"></div>
+      <button id="toFinal" class="chalk-btn reveal" type="button">Nhận lời chúc cuối cùng →</button>
+    </section>
+
+    <section id="finalScene" class="scene final-scene" aria-labelledby="finalTitle" hidden>
+      <div class="final-card reveal">
+        <span class="chapter">VÀ CUỐI CÙNG…</span>
+        <h2 id="finalTitle">Chúc mừng<br><em>ngày Phụ nữ Việt Nam!</em></h2>
+        <p id="finalWish"></p>
+        <div class="signature">— Từ những chàng trai <span id="className">lớp chúng mình</span> ♡</div>
+        <button id="replay" class="primary-btn" type="button">Xem lại từ đầu <span>↻</span></button>
+      </div>
+      <div class="final-date">20 <span>tháng</span> 10</div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
