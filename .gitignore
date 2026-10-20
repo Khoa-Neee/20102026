@@ -1,1 +1,4 @@
 site-bundle.tar.gz
+node_modules/
+.sites-runtime/
+.wrangler/
